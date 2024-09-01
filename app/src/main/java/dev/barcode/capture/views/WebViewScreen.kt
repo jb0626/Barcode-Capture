@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
+import dev.barcode.capture.viewmodels.WebViewModel
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
@@ -17,6 +18,7 @@ fun WebViewScreen(
     navController: NavHostController,
     url: String
 ) {
+    val viewModel = WebViewModel(url)
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
@@ -24,7 +26,7 @@ fun WebViewScreen(
                 settings.javaScriptEnabled = true
                 settings.cacheMode = WebSettings.LOAD_NO_CACHE
                 webChromeClient = WebChromeClient()
-                loadUrl(url)
+                loadUrl(viewModel.url)
                 addJavascriptInterface(
                     JsBridge(),
                     "Native"
