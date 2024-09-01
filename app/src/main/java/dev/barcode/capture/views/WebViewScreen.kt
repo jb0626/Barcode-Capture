@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
+import dev.barcode.capture.viewmodels.IBridge
 import dev.barcode.capture.viewmodels.WebViewModel
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -36,9 +37,9 @@ fun WebViewScreen(
     )
 }
 
-class JsBridge {
+class JsBridge : IBridge {
     @JavascriptInterface
-    fun testConsolelog() {
+    override fun testConsolelog() {
         println("This' from Web")
     }
 }
