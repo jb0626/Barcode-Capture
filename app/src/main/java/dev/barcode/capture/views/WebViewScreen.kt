@@ -61,18 +61,7 @@ private fun ShowWebView(url: String) {
                 settings.cacheMode = WebSettings.LOAD_NO_CACHE
                 webChromeClient = WebChromeClient()
                 loadUrl(url)
-                addJavascriptInterface(
-                    JsBridge(),
-                    "NativeCaller"
-                )
             }
         }
     )
-}
-
-class JsBridge : IBridge {
-    @JavascriptInterface
-    override fun testConsolelog() {
-        println("This' from Web")
-    }
 }
