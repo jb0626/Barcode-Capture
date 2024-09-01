@@ -38,6 +38,8 @@ import dev.barcode.capture.BuildConfig
 import dev.barcode.capture.extensions.createTmpImageFile
 import dev.barcode.capture.viewmodels.WebViewModel
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Objects
 
 @Composable
@@ -168,10 +170,17 @@ private fun scaleDownImage(bm: Bitmap): Bitmap {
     return result
 }
 
+@SuppressLint("SimpleDateFormat")
 private fun getUriFromBitmap(context: Context, bm: Bitmap): Uri {
     val bytes = ByteArrayOutputStream()
     bm.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
     val path =
-        MediaStore.Images.Media.insertImage(context.contentResolver, bm, "tmp_20240901", null)
+        MediaStore.Images.Media.insertImage(
+            context.contentResolver, bm, "tmp_${
+                SimpleDateFormat("yyyyMMdd_HHmmss").format(
+                    Date()
+                )
+            }", null
+        )
     return Uri.parse(path)
 }
