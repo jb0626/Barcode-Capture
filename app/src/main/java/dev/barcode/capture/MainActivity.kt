@@ -30,14 +30,22 @@ class MainActivity : ComponentActivity() {
                         route = NavigationRoutes.WebView.route,
                         arguments = listOf(
                             navArgument("url") {
-                                defaultValue = "http://172.30.1.44:8080/BarcodeDetector.html"
+                                defaultValue = ""
                                 type = NavType.StringType
                             }
                         )
                     ) {
                         WebViewScreen(
                             navController = navController,
-                            url = it.arguments?.getString("url") ?: ""
+                            url = it.arguments?.getString("url")
+                        )
+                    }
+                    composable(
+                        route = NavigationRoutes.WebViewNoParams.route,
+                    ) {
+                        WebViewScreen(
+                            navController = navController,
+                            url = ""
                         )
                     }
                 }

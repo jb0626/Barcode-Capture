@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import dev.barcode.capture.navigation.NavigationRoutes
 
@@ -26,10 +27,16 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(16.dp),
             onClick = {
-                navController.navigate(NavigationRoutes.WebView.route)
+                navController.navigate(
+                    NavigationRoutes.WebView.route
+                        .replace(
+                            oldValue = "{url}",
+                            newValue = ""
+                        )
+                )
             }
         ) {
-            Text(text = "Open web page")
+            Text(text = "Open web page", fontSize = 16.sp)
         }
     }
 }
