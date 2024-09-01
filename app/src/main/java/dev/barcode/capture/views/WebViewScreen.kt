@@ -30,7 +30,7 @@ fun WebViewScreen(
                 loadUrl(viewModel.url)
                 addJavascriptInterface(
                     JsBridge(),
-                    "Native"
+                    "NativeCaller"
                 )
             }
         }
