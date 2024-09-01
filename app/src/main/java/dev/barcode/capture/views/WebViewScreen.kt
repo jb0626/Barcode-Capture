@@ -161,10 +161,7 @@ private fun scaleDownImage(bm: Bitmap): Bitmap {
         return bm
     }
 
-    val resizeWidth = 1500
-    val aspectRatio = bm.height.toDouble() / bm.width.toDouble()
-    val resizeHeight = (resizeWidth * aspectRatio).toInt()
-    val result: Bitmap = Bitmap.createScaledBitmap(bm, resizeWidth, resizeHeight, false)
+    val result: Bitmap = Bitmap.createScaledBitmap(bm, 1500, 1500, false)
 
     bm.recycle()
 
