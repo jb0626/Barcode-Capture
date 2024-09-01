@@ -10,6 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dev.barcode.capture.navigation.NavigationRoutes
 import dev.barcode.capture.ui.theme.BarcodeCaptureTheme
+import dev.barcode.capture.viewmodels.HomeViewModel
+import dev.barcode.capture.viewmodels.WebViewModel
 import dev.barcode.capture.views.HomeScreen
 import dev.barcode.capture.views.WebViewScreen
 
@@ -24,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = NavigationRoutes.Home.route
                 ) {
                     composable(NavigationRoutes.Home.route) {
-                        HomeScreen(navController)
+                        HomeScreen(navController, HomeViewModel())
                     }
                     composable(
                         route = NavigationRoutes.WebView.route,
@@ -37,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         WebViewScreen(
                             navController = navController,
-                            url = it.arguments?.getString("url")
+                            viewModel = WebViewModel(it.arguments?.getString("url") ?: "")
                         )
                     }
                     composable(
@@ -45,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         WebViewScreen(
                             navController = navController,
-                            url = ""
+                            viewModel = WebViewModel("")
                         )
                     }
                 }

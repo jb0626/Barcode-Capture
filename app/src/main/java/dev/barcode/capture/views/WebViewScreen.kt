@@ -23,9 +23,8 @@ import dev.barcode.capture.viewmodels.WebViewModel
 @Composable
 fun WebViewScreen(
     navController: NavHostController,
-    url: String?
+    viewModel:WebViewModel
 ) {
-    val viewModel = WebViewModel(url ?: "")
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
