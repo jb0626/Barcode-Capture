@@ -26,19 +26,20 @@
                     var self = this,
                     config = $.extend({}, self.state, {src: src});
 
-                    Quagga.decodeSingle(config, function(result) {
+                    Quagga.decodeSingle(config, function(e) {
                         try {
                             $("#resultImg").attr("src", src);
-                            console.log("Barcode : " + result.codeResult.code);
-                            $("#resultText").text("Barcode : " + result.codeResult.code);
+                            console.log("Barcode : " + e.codeResult.code);
+                            $("#resultText").text("Barcode : " + e.codeResult.code);
                         } catch(e) {
-                            $("#resultText").text("Not supported barcode type. Please check again.");
+                            console.log("error : " + e);
+                            $("#resultText").text("Not supported barcode type. Please check again. (" + e + ")");
                         }
                     });
                 },
                 state: {
                     inputStream: {
-                        size: 1000,
+                        size: 1500,
                         singleChannel: false
                     },
                     locator: {
@@ -46,10 +47,10 @@
                         halfSample: true
                     },
                     decoder: {
-                        readers: [{
-                            format: "ean_reader",
-                            config: {}
-                        }]
+                        readers: [
+                            "ean_reader",
+                            "code_128_reader", 
+                        ]
                     },
                     locate: true,
                     src: null
