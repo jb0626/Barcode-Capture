@@ -3,11 +3,14 @@ package dev.barcode.capture.views
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.provider.Settings
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -34,6 +37,7 @@ import androidx.navigation.NavHostController
 import dev.barcode.capture.BuildConfig
 import dev.barcode.capture.extensions.createTmpImageFile
 import dev.barcode.capture.viewmodels.WebViewModel
+import java.io.ByteArrayOutputStream
 import java.util.Objects
 
 @Composable
@@ -80,12 +84,13 @@ private fun ShowWebView(url: String) {
 
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            val scaledB = scaleDownImage(getBitmapFromUri(context, uri))
             if (success) {
                 webViewCallback?.onReceiveValue(
                     WebChromeClient.FileChooserParams.parseResult(
                         Activity.RESULT_OK,
                         Intent().apply {
-                            data = uri
+                            data = getUriFromBitmap(context, scaledB)
                         }
                     )
                 )
@@ -142,4 +147,34 @@ private fun ShowWebView(url: String) {
             }
         }
     )
+}
+
+private fun getBitmapFromUri(context: Context, uri: Uri): Bitmap =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+    } else {
+        MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+    }
+
+private fun scaleDownImage(bm: Bitmap): Bitmap {
+    if (bm.width <= 1500 && bm.height <= 1500) {
+        return bm
+    }
+
+    val resizeWidth = 1500
+    val aspectRatio = bm.height.toDouble() / bm.width.toDouble()
+    val resizeHeight = (resizeWidth * aspectRatio).toInt()
+    val result: Bitmap = Bitmap.createScaledBitmap(bm, resizeWidth, resizeHeight, false)
+
+    bm.recycle()
+
+    return result
+}
+
+private fun getUriFromBitmap(context: Context, bm: Bitmap): Uri {
+    val bytes = ByteArrayOutputStream()
+    bm.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+    val path =
+        MediaStore.Images.Media.insertImage(context.contentResolver, bm, "tmp_20240901", null)
+    return Uri.parse(path)
 }
